@@ -15,18 +15,27 @@ configure_file(version.h.in version.h)
 add_executable(helloworld_cli main.cpp)
 add_library(helloworld lib.cpp)
 add_executable(test_version test_version.cpp)
+add_executable(test_version_gtest test_version_gtest.cpp)
 
-set_target_properties(helloworld_cli helloworld test_version PROPERTIES
+set_target_properties(helloworld_cli helloworld test_version test_version_gtest PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 target_include_directories(helloworld
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
+
+
 set_target_properties(test_version PROPERTIES
     COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
     INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
 )
+
+set_target_properties(test_version_gtest PROPERTIES
+    INCLUDE_DIRECTORIES ${GTEST_INCLUDE_DIRS}
+)
+
+
 
 target_link_libraries(helloworld_cli PRIVATE
     helloworld
@@ -35,7 +44,14 @@ target_link_libraries(test_version
     ${Boost_LIBRARIES}
     helloworld
 )
-target_link_libraries(test_version gtest helloworld)
+
+target_link_libraries(test_version_gtest
+    gtest
+    pthread
+    helloworld
+)
+
+target_link_libraries(test_version helloworld)
 
 if (MSVC)
     target_compile_options(helloworld_cli PRIVATE
@@ -76,3 +92,4 @@ include(CPack)
 enable_testing()
 
 add_test(test_version test_version)
+add_test(test_version_gtest test_version_gtest)
