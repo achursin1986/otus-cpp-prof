@@ -11,25 +11,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    env:
-       working-directory: ./HW1 
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-      - run: cd /home/runner/work/otus-cpp-prof/otus-cpp-prof
+      - run: cd /home/runner/work/otus-cpp-prof/otus-cpp-prof/HW1
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_BOOST_TEST=ON
       - run: cmake --build .
       - run: cmake --build . --target test
       - run: cmake --build . --target package
-        working-directory: ${{env.working-directory }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          working-directory: ${{env.working-directory }}
         with:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
@@ -40,7 +36,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          working-directory: ${{env.working-directory }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
