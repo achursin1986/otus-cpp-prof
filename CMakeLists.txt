@@ -8,6 +8,7 @@ project(helloworld VERSION ${PROJECT_VESRION})
 
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(GTest REQUIRED)
 
 configure_file(version.h.in version.h)
 
@@ -34,6 +35,7 @@ target_link_libraries(test_version
     ${Boost_LIBRARIES}
     helloworld
 )
+target_link_libraries(test_version gtest helloworld)
 
 if (MSVC)
     target_compile_options(helloworld_cli PRIVATE
