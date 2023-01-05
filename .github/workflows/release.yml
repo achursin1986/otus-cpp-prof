@@ -6,7 +6,7 @@ on:
       - main
       - feature/github_actions
     tag:
-      - HW*
+      - HW.*
 
 jobs:
   build:
