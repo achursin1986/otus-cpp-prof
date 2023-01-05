@@ -5,7 +5,7 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VESRION})
 
-add_subdirectory(HW1)
+
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
