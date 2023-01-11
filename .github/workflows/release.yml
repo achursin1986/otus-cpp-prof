@@ -3,7 +3,7 @@ name: 'C++ CI'
 on:
   push:
     tag:
-      - '*'
+      - 'HW1'
 
 jobs:
   build:
