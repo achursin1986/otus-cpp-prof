@@ -16,12 +16,15 @@ target_include_directories(ip_filter
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
+target_include_directories(ip_filter  PRIVATE include)
+
 
 
 set_target_properties(test_gtest PROPERTIES
     INCLUDE_DIRECTORIES ${GTEST_INCLUDE_DIRS}
 )
 
+target_include_directories(test_gtest  PRIVATE include)
 
 
 

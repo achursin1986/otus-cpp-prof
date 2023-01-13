@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "lib.hpp"
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -12,25 +13,7 @@
 // (".11", '.') -> ["", "11"]
 // ("11.22", '.') -> ["11", "22"]
 
-using vector_of_strings = std::vector<std::string>;
-using vector_of_vectors_of_strings = std::vector<std::vector<std::string>>;
 
-vector_of_strings split(const std::string& str, char d) {
-	vector_of_strings r;
-
-	std::string::size_type start = 0;
-	std::string::size_type stop = str.find_first_of(d);
-	while (stop != std::string::npos) {
-		r.push_back(str.substr(start, stop - start));
-
-		start = stop + 1;
-		stop = str.find_first_of(d, start);
-	}
-
-	r.push_back(str.substr(start));
-
-	return r;
-}
 
 int main() {
 	try {
@@ -43,25 +26,7 @@ int main() {
 
 		// TODO reverse lexicographically sort
 		// can be lambda here
-		std::sort(
-		    ip_pool.begin(), ip_pool.end(),
-		    [](vector_of_strings& v1, vector_of_strings& v2) -> bool {
-			    if (v1.size() != v2.size()) {
-				    throw std::invalid_argument(
-					"some ip addresses are wrong sizes");
-			    }
-			    for (vector_of_strings::size_type i = 0;
-				 i != v1.size(); i++) {
-				    if (std::stoi(v1[i]) > std::stoi(v2[i])) {
-					    return true;
-				    } else if (v1[i] == v2[i]) {
-					    continue;
-				    } else {
-					    return false;
-				    }
-			    }
-			    return false;
-		    });
+		std::sort(ip_pool.begin(), ip_pool.end(), vector_compare);
 
 		// auto
 		for (vector_of_vectors_of_strings::const_iterator ip =
@@ -94,7 +59,7 @@ int main() {
 		// 1.70.44.170
 		// 1.29.168.152
 		// 1.1.234.8
-
+                /*
 		for (auto ip : ip_pool) {
 			if (std::stoi(ip[0]) != 1) {
 				continue;
@@ -108,6 +73,8 @@ int main() {
 			}
 			std::cout << std::endl;
 		}
+                */
+                
 
 		// TODO filter by first and second bytes and output
 		// ip = filter(46, 70)
@@ -116,7 +83,7 @@ int main() {
 		// 46.70.147.26
 		// 46.70.113.73
 		// 46.70.29.76
-
+                /*
 		for (auto ip : ip_pool) {
 			if ((std::stoi(ip[0]) == 46) &&
 			    (std::stoi(ip[1]) == 70)) {
@@ -129,7 +96,7 @@ int main() {
 				}
 				std::cout << std::endl;
 			}
-		}
+		} */
 
 		// TODO filter by any byte and output
 		// ip = filter_any(46)
@@ -168,7 +135,7 @@ int main() {
 		// 46.49.43.85
 		// 39.46.86.85
 		// 5.189.203.46
-
+            /*
 		for (auto ip : ip_pool) {
 			bool found = false;
 			for (auto octet : ip) {
@@ -189,6 +156,11 @@ int main() {
 			}
 			std::cout << std::endl;
 		}
+              */
+
+        filter(ip_pool,{1});
+        filter(ip_pool,{46,70});
+        filter_any(ip_pool,46);
 
 	} catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
