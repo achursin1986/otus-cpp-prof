@@ -1,52 +1,8 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.5)
 
-project(ip_filter)
+project(06.allocator)
 
-
-find_package(GTest REQUIRED)
-
-add_executable(ip_filter ip_filter.cpp)
-add_executable(test_gtest test_gtest.cpp)
-
-set_target_properties(ip_filter test_gtest PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
-)
-target_include_directories(ip_filter
-    PRIVATE "${CMAKE_BINARY_DIR}"
-)
-
-target_include_directories(ip_filter  PRIVATE include)
-
-
-
-set_target_properties(test_gtest PROPERTIES
-    INCLUDE_DIRECTORIES ${GTEST_INCLUDE_DIRS}
-)
-
-target_include_directories(test_gtest  PRIVATE include)
-
-
-
-target_link_libraries(test_gtest
-    gtest
-    pthread
-)
-
-
-if (MSVC)
-    target_compile_options(ip_filter PRIVATE
-        /W4
-    )
-    target_compile_options(test_gtest PRIVATE
-        /W4
-    )
-else ()
-    target_compile_options(ip_filter PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(test_gtest PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-endif()
-
+add_executable(application application.cpp)
+set_target_properties(application PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+target_include_directories(application PRIVATE include)
+target_compile_options(application PRIVATE  -g  )
