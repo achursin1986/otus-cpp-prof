@@ -34,13 +34,12 @@ struct MyAllocator {
 template <typename T, size_t N>
 MyAllocator<T, N>::MyAllocator() {
 	size = N;
-	free = N;
+	free = N * sizeof(T);
 	auto p = std::malloc(N * sizeof(T));
 	if (!p) throw std::bad_alloc();
 	start = reinterpret_cast<T*>(p);
 	curr = start;
 #ifndef USE_PRETTY
-	// std::cout << "Allocated: " << N * sizeof(T) << " bytes" << std::endl;
 #else
 	std::cout << __PRETTY_FUNCTION__ << "objects = " << N << std::endl;
 #endif
@@ -53,17 +52,13 @@ MyAllocator<T, N>::MyAllocator(const MyAllocator<U, N>&) {}
 template <typename T, size_t N>
 T* MyAllocator<T, N>::allocate(std::size_t n) {
 #ifndef USE_PRETTY
-	// std::cout << "allocate: " << n << " objects" << std::endl;
 #else
 	std::cout << __PRETTY_FUNCTION__ << "objects = " << N << std::endl;
 #endif
-	// auto p = std::malloc(n * sizeof(T));
-	// if (!p) throw std::bad_alloc();
-	// std::cout << n * sizeof(T) << std::endl;
 	free -= n * sizeof(T);
 	prev = curr;
 	curr += n;
-	if (free < 0) {
+	if (free > N*sizeof(T)) {
 		throw std::bad_alloc();
 	}
 	return prev;
@@ -72,7 +67,6 @@ T* MyAllocator<T, N>::allocate(std::size_t n) {
 template <typename T, size_t N>
 void MyAllocator<T, N>::deallocate(T* p, std::size_t n) {
 #ifndef USE_PRETTY
-	// std::cout << "deallocate: " << n << " objects" << std::endl;
 #else
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 #endif
