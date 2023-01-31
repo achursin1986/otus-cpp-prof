@@ -1,9 +1,9 @@
 #pragma once
 
+#include <cstring>
 #include <iostream>
 #include <memory>
 
-#include "container.hpp"
 /*
 #define USE_PRETTY
 */
@@ -22,6 +22,7 @@ struct MyAllocator {
 		using other = MyAllocator<U, N>;
 	};
 
+
 	T* allocate(std::size_t n);
 
 	void deallocate(T* p, std::size_t n);
@@ -32,13 +33,7 @@ struct MyAllocator {
 };
 
 template <typename T, size_t N>
-MyAllocator<T, N>::MyAllocator() {
-	size = N;
-	free = N * sizeof(T);
-	auto p = std::malloc(N * sizeof(T));
-	if (!p) throw std::bad_alloc();
-	start = reinterpret_cast<T*>(p);
-	curr = start;
+MyAllocator<T, N>::MyAllocator() : size{}, free{} {
 #ifndef USE_PRETTY
 #else
 	std::cout << __PRETTY_FUNCTION__ << "objects = " << N << std::endl;
@@ -53,13 +48,33 @@ template <typename T, size_t N>
 T* MyAllocator<T, N>::allocate(std::size_t n) {
 #ifndef USE_PRETTY
 #else
-	std::cout << __PRETTY_FUNCTION__ << "objects = " << N << std::endl;
+	std::cout << __PRETTY_FUNCTION__ << "objects = " << n << std::endl;
 #endif
+        if ( n > N ) {
+            auto p = std::malloc(n * sizeof(T));
+                size = n;
+                free = n * sizeof(T)/2;  // bytes
+                start = reinterpret_cast<T*>(p);
+                prev = start;
+                curr = start + n;
+                return prev;
+        }
+
+
+	if (!size) {
+		auto p = std::malloc(N * sizeof(T));
+		size = N;
+		free = N * sizeof(T);  // bytes
+		start = reinterpret_cast<T*>(p);
+		curr = start;
+	}
+
 	free -= n * sizeof(T);
 	prev = curr;
 	curr += n;
-	if (free > N*sizeof(T)) {
-		throw std::bad_alloc();
+	if (free > size * sizeof(T)) {
+	       free = 0;	
+               //throw std::bad_alloc();
 	}
 	return prev;
 }
@@ -69,12 +84,26 @@ void MyAllocator<T, N>::deallocate(T* p, std::size_t n) {
 #ifndef USE_PRETTY
 #else
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-#endif
+#endif  
+
+        if (n == 2*size / 3) {
+            std::free(p);
+            return;
+        }
 	free += n * sizeof(T);
-	if (free == size) {
+
+	if (free == size * sizeof(T) || n == size) {
 		std::free(p);
-		free = N;
-                curr = start;
+		free = 0;
+		size = 0;
+	} else {
+		int index = static_cast<int>(p - start);
+		auto temp = std::malloc((size - n - index)*sizeof(T));
+		std::memcpy(temp, start + index, (size - index - n)*sizeof(T));
+		std::memcpy(start + index, temp, (size - index - n)*sizeof(T));
+		curr = start + size - n; // pointers
+
+		std::free(temp);
 	}
 }
 
