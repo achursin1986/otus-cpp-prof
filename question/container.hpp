@@ -124,11 +124,11 @@ class L1_Node {
 };
 
 
-// Have a look here
+// have a look here
 template <typename T,unsigned int S, class A>
 void L1_Node<T,S,A>::Push_back(T value) {
         free--;
-        if ( ! free ) {
+        /*if ( ! free ) {
                 s++;
         }
         if ( s > S ) {
@@ -138,7 +138,7 @@ void L1_Node<T,S,A>::Push_back(T value) {
             }
             *this = temp;                           
 
-        }
+        }*/
          
 	struct Data1<T>* New;
 	New = Allocator.allocate(1);
