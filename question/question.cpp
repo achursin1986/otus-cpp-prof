@@ -12,7 +12,7 @@ int main() {
 	}
 	cont_test.Print();
 
-	std::cout << "Custom container custom allocator - remove 3rd element:" << std::endl;
+	std::cout << "Custom container custom allocator - remove 3rd element and add 101:" << std::endl;
 	cont_test.Erase(3);
         cont_test.Push_back(101);
 	cont_test.Print();
