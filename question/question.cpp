@@ -18,7 +18,7 @@ int main() {
 	cont_test.Print();
 	/*cont_test.Push_back(101);
 	cont_test.Push_back(111);
-	std::cout << "Custom container custom allocator - push 2 new elements with expanding:" << std::endl;
-	cont_test.Print();*/
+	std::cout << "Custom container custom allocator - push 2 new elements with expanding:" << std::endl; */
+	//cont_test.Print();
 	return 0;
 }

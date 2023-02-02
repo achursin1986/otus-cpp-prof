@@ -76,7 +76,7 @@ class L1_Node {
                                  Temp1 = Head;
                                  Head->value = Other.Head->value;
 
-                                 while ( Temp1 ) {
+                                 while ( Temp ) {
                                       //New = Other.Allocator.allocate(1);
                                       //New->value = Temp->value;
                                       //New->next = NULL;
@@ -133,12 +133,11 @@ void L1_Node<T,S,A>::Push_back(T value) {
         }
         if ( s > S ) {
             L1_Node<T, S+1, MyAllocator<Data1<T>, S+1>> temp(0);
-            for (auto i = this->begin(), end = this->end(); i != end; ++i) {
-               temp.Push_back(*i); 
-            }
+            temp = *this;
+            
             *this = temp;                           
 
-        }*/
+        }  */
          
 	struct Data1<T>* New;
 	New = Allocator.allocate(1);
