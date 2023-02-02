@@ -72,22 +72,22 @@ class L1_Node {
                                  if ( !Other.Head && !Other.Tail ) {
                                         std::exit(1);
                                  }
-                                 Temp = Other.Head->next;
+                                 Temp = Other.Head;//->next;
                                  Temp1 = Head;
                                  Head->value = Other.Head->value;
 
-                                 while ( Temp ) {
-                                      New = Other.Allocator.allocate(1);
-                                      New->value = Temp->value;
-                                      New->prev = Temp1;
-                                      New->next = NULL;
-                                      Temp1->next = New;
+                                 while ( Temp1 ) {
+                                      //New = Other.Allocator.allocate(1);
+                                      //New->value = Temp->value;
+                                      //New->next = NULL;
+                                      //Temp1->next = New;
+                                      Temp1->value = Temp->value;
                                       Temp1 = Temp1->next;
                                       Temp = Temp -> next;
 
                                  };
 
-                                 Tail = New;
+                                 //Tail = New;
                                  return *this;
                 }
 
@@ -128,7 +128,7 @@ class L1_Node {
 template <typename T,unsigned int S, class A>
 void L1_Node<T,S,A>::Push_back(T value) {
         free--;
-        /*if ( ! free ) {
+        if ( ! free ) {
                 s++;
         }
         if ( s > S ) {
@@ -138,7 +138,7 @@ void L1_Node<T,S,A>::Push_back(T value) {
             }
             *this = temp;                           
 
-        }*/
+        }
          
 	struct Data1<T>* New;
 	New = Allocator.allocate(1);
