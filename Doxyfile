@@ -1,0 +1,9 @@
+PROJECT_NAME           = "HW4"
+PROJECT_NUMBER         = 0.0.1
+PROJECT_BRIEF          = "C++ HW4"
+OUTPUT_DIRECTORY       = ./doc/
+OUTPUT_LANGUAGE        = English
+GENERATE_LATEX         = NO
+EXTRACT_ALL            = YES
+INPUT                  = ./print_ip.cpp ./include/utils.cpp
+RECURSIVE              = YES
