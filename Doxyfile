@@ -6,4 +6,5 @@ OUTPUT_LANGUAGE        = English
 GENERATE_LATEX         = NO
 EXTRACT_ALL            = YES
 INPUT                  = .
+INPUT                  += include/
 RECURSIVE              = YES
