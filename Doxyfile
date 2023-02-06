@@ -5,5 +5,5 @@ OUTPUT_DIRECTORY       = ./doc/
 OUTPUT_LANGUAGE        = English
 GENERATE_LATEX         = NO
 EXTRACT_ALL            = YES
-INPUT                  = ./print_ip.cpp ./include/utils.cpp
+INPUT                  = .
 RECURSIVE              = YES
