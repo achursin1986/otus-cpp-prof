@@ -1,56 +1,18 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(MVC LANGUAGES CXX)
+project(mvc CXX)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+add_executable(mvc main.cpp)
+set_target_properties(mvc PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+target_include_directories(mvc PRIVATE include)
+target_compile_options(mvc PRIVATE -g )
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# QtCreator supports the following variables for Android, which are identical to qmake Android variables.
-# Check http://doc.qt.io/qt-5/deployment-android.html for more information.
-# They need to be set before the find_package(Qt5 ...) call.
-
-#if(ANDROID)
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
-#        set(ANDROID_EXTRA_LIBS
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
-#    endif()
-#endif()
-
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-
-
-if(ANDROID)
-  add_library(MVC SHARED
-      main.cpp
-      mainwindow.ui
-      controller.h
-      controller.cpp
-      data.h
-      data.cpp
-
-
-  )
-else()
-  add_executable(MVC
-    main.cpp
-    mainwindow.ui
-    controller.h
-    controller.cpp
-    data.h
-    data.cpp
-
-
-  )
-endif()
-
-
-
-target_link_libraries(MVC PRIVATE Qt5::Widgets)
+install(TARGETS mvc RUNTIME DESTINATION bin)
+set(CPACK_GENERATOR DEB)
+set(CPACK_PACKAGE_NAME "mvc")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "1")
+set(CPACK_PACKAGE_CONTACT example@example.com)
+include(CPack)
