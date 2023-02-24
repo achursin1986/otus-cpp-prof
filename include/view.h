@@ -14,10 +14,10 @@ class View: public Callback {
         void Render() {
             // present data in GUI
         }
-        void callback()
+        /*void callback()
         {
              this->Render();
-        }
+        }*/
         /* static void callback(void* obj) {
               View* ptr_this= reinterpret_cast<View*>(obj)
               ptr_this->Render();

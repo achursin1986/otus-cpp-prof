@@ -2,7 +2,7 @@
 #include "model.h"
 #include "view.h"
 
-class Controller {
+class Controller: public Callback {
     public:
         Controller(const Model &model, const View &view) {
           this->SetModel(model);
@@ -14,8 +14,13 @@ class Controller {
         void SetView(const View &view) {
             this->view = view;
         }
+
+
         void OnLoad() {
             this->view.Render();
+        }
+        void callback() {
+            this->OnLoad();
         }
     private:
         Model model;
