@@ -28,7 +28,7 @@ int main() {
       controller.model.NewData
       invokes controller -> OnLoad()
 
-      controller.model.AddLine(int x1, int y1, int x2, int y2)
+      controller.model.AddLine(x1, y1, x2, y2, id)
       invokes controller -> OnLoad()
       
       controller.model.RemoveLast

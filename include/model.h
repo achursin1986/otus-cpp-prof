@@ -1,6 +1,7 @@
 #pragma once
 #include "figures.h"
 #include "common.h"
+#include <memory>
 
 class Model: public Callback {
     public:
@@ -14,14 +15,18 @@ class Model: public Callback {
 		this->event->callback();
 	};
 
-	void AddLine(int x1, int y1, int x2, int y2) {
-		document.get()->Add_Line(x1, y1, x2, y2);
+	void AddLine(int x1, int y1, int x2, int y2,int id) {
+		document.get()->Add_Shape(std::make_unique<Shape>(Line(x1, y1, x2, y2, id)));
 		this->event->callback();
 	};
 	void RemoveLast() {
 		document.get()->Remove_Last();
 		this->event->callback();
 	}
+        void RemoveId(int id) {
+                document.get()->Remove_Id(id);
+                this->event->callback();
+        }
 	void RegisterDataChangeHandlers(Callback* handler) { this->event = handler; }
 
     private:
