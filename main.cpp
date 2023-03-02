@@ -1,38 +1,54 @@
+#include <cassert>
 #include <iostream>
-#include "view.h"
-#include "model.h"
-#include "controller.h"
-#include "common.h"
+#include <iomanip>
 
-// include graphics
-
-
-/*void DataChange() {
-  //std::cout << "Render" << std::endl;
-  
-}*/
+#include "frontend.h"
 
 int main() {
-    Model model;
-    View view(model);
-    Controller controller(model, view);
-    model.RegisterDataChangeHandlers(&controller);
-    /* GUI thread using view 
-      gets data from GUI and calls methods of Model through Controller 
-      controller.model.LoadData
-      invokes controller -> OnLoad()
+	frontend<int, -1> matrix;
+	assert(matrix.size() == 0);
+	auto a = matrix[0][0];
+	assert(a == -1);
+	assert(matrix.size() == 0);
 
-      controller.model.SaveData
-      no need to update
+        matrix[100][100] = 314;
+        assert(matrix[100][100] == 314);
+        assert(matrix.size() == 1);
 
-      controller.model.NewData
-      invokes controller -> OnLoad()
 
-      controller.model.AddLine(x1, y1, x2, y2, id)
-      invokes controller -> OnLoad()
-      
-      controller.model.RemoveLast
-      invokes controller -> OnLoad();
-    */
-    return 0;
+        frontend<int, 0> matrix4;
+        for (auto i = 0; i < 10; i++) {
+                matrix4[i][i] = i;
+                matrix4[i][9 - i] = 9 - i;
+        }
+
+	for (auto i = 1; i < 9; i++) {
+		for (auto j = 1; j < 9; j++) {
+			std::cout << std::setw(2) << matrix4[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+        std::cout << "occupied = " << matrix4.size() << std::endl;
+
+        matrix[100][100] = 314;
+        assert(matrix[100][100] == 314);
+        assert(matrix.size() == 1);
+
+	frontend<int, 0> matrix2;
+	for (auto i = 0; i < 10; i++) {
+		matrix2[i][i] = i;
+		matrix2[i][9 - i] = 9 - i;
+	}
+	for (auto c : matrix2) {
+		int i;
+		int j;
+		int value;
+		std::tie(i, j, value) = c;
+		std::cout << "i:" << i << " j:" << j << " value=" << value << std::endl;
+	}
+	frontend<int, -1> matrix3;
+	((matrix3[100][100] = 314) = 0) = 217;
+	std::cout << matrix3[100][100] << std::endl;
+
+	return 0;
 }
