@@ -1,54 +1,32 @@
-#include <cassert>
 #include <iostream>
-#include <iomanip>
+#include <string>
+#include <chrono>
+#include "data.hpp"
+#include "parser.hpp"
+#include "common.hpp"
 
-#include "frontend.h"
+
+
+
 
 int main() {
-	frontend<int, -1> matrix;
-	assert(matrix.size() == 0);
-	auto a = matrix[0][0];
-	assert(a == -1);
-	assert(matrix.size() == 0);
 
-        matrix[100][100] = 314;
-        assert(matrix[100][100] == 314);
-        assert(matrix.size() == 1);
+    int N;
+    std::string input;
 
+    std::cout << "Enter N" << std::endl;  
+    std::cin >> N;
 
-        frontend<int, 0> matrix4;
-        for (auto i = 0; i < 10; i++) {
-                matrix4[i][i] = i;
-                matrix4[i][9 - i] = 9 - i;
-        }
+    data Data;
+    parser Parser("{","}","cmd", N ,&Data);
 
-	for (auto i = 1; i < 9; i++) {
-		for (auto j = 1; j < 9; j++) {
-			std::cout << std::setw(2) << matrix4[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
-        std::cout << "occupied = " << matrix4.size() << std::endl;
+    std::cout << "Start entering commands" << std::endl;
 
-        matrix[100][100] = 314;
-        assert(matrix[100][100] == 314);
-        assert(matrix.size() == 1);
+    while ( true ) {
+           std::cin >> input;
+           if ( std::cin.eof() ) { Parser.check("null"); break; }
+           Parser.check(input);
+            
+   }
 
-	frontend<int, 0> matrix2;
-	for (auto i = 0; i < 10; i++) {
-		matrix2[i][i] = i;
-		matrix2[i][9 - i] = 9 - i;
-	}
-	for (auto c : matrix2) {
-		int i;
-		int j;
-		int value;
-		std::tie(i, j, value) = c;
-		std::cout << "i:" << i << " j:" << j << " value=" << value << std::endl;
-	}
-	frontend<int, -1> matrix3;
-	((matrix3[100][100] = 314) = 0) = 217;
-	std::cout << matrix3[100][100] << std::endl;
-
-	return 0;
 }

@@ -1,4 +1,4 @@
-name: 'HW6'
+name: 'HW7'
 
 on:
   push:
@@ -32,6 +32,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./matrix.deb
-          asset_name: matrix.deb
+          asset_path: ./bulk.deb
+          asset_name: bulk.deb
           asset_content_type: application/vnd.debian.binary-package
