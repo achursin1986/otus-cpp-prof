@@ -3,7 +3,7 @@
 
 struct command {
     command() = delete;
-    command(std::string _data): data(_data){};
+    command(std::string&& _data): data(std::move(_data)){};
     std::string data;
 
 };
@@ -16,9 +16,9 @@ struct drain{ };
 class ops { 
 
      public:
-       virtual void event(struct command){};
-       virtual void event(struct save){};
-       virtual void event(struct drain){};       
+       virtual void event(const struct command&){};
+       virtual void event(const struct save&){};
+       virtual void event(const struct drain&){};       
 
        virtual ~ops(){};
 };

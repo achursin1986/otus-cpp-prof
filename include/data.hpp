@@ -5,25 +5,35 @@
 #include "common.hpp"
 #include <fstream>
 
+
+void print(std::ostream &os1, std::ostream &os2, const std::string &str)
+{
+    os1 << str;
+    os2 << str;
+}
+
+
+
+
 class data: public ops {
      
 
     public:
 
-      void event(struct command input) { 
+      void event(const struct command& input) { 
           append(input.data);
       };
-      void event(struct save) {
+      void event(const struct save&) {
           save();
       };
-      void event(struct drain) {
+      void event(const struct drain&) {
           drain();
       };
 
 
-      void append(std::string& command) {
-            if ( !commands.size() ) {
-               current_time = std::time(0);
+      void append(std::string command) {
+            if ( commands.empty() ) {
+               current_time = std::time(nullptr);
             }
 
             commands.push_back(command);
@@ -36,14 +46,11 @@ class data: public ops {
       void save() {
         std::string filename = "bulk" + std::to_string(current_time) + ".log";
         std::ofstream output_file(filename);
-        output_file << "bulk: ";
-        std::cout << "bulk: ";
+        print(output_file,std::cout, "bulk: ");
         for (int i =0; i<commands.size(); i++ ) {
-             output_file << commands[i];
-             std::cout << commands[i];
+             print(output_file,std::cout, commands[i]);
              if ( i != commands.size() -1 )  {
-                  output_file << ",";
-                   std::cout << ",";
+                   print(output_file,std::cout, ",");
              } else {
                     output_file << "\n";
                    std::cout << std::endl;

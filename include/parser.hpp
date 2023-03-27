@@ -11,7 +11,6 @@ class parser : public ops {
 	void check(std::string input) {
 		if (input == open) {
 			brackets.push(open);
-			//S = N;
 			lock = true;
 		}
 		if (input == close) {
@@ -19,7 +18,8 @@ class parser : public ops {
 		}
 		if ((input.find(prefix) != std::string::npos) && (input != open) && (input != close)) {
 			if (!(S == N && brackets.empty())) {
-				data->event(command(input));
+				data->event(command(std::move(input)));
+                                //data->event(command(input)); 
 				if (!lock) {
 					S++;
 				}
@@ -43,7 +43,7 @@ class parser : public ops {
 			lock = false;
 			S = 0;
 		}
-		if (input == "null"  && !lock ) data->event(save());
+		if (input == "null"  && !lock && N > 1) data->event(save());
 	}
 
 	void set_data(ops* _data) { data = _data; }

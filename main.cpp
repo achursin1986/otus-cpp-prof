@@ -6,25 +6,30 @@
 #include "common.hpp"
 
 
+static std::string zero = "null";
 
 
+int main(int argc, char* argv[] ) {
 
-int main() {
+    if ( argc != 2 ) {
+           std::cout << "need 1 argument" << std::endl;
+           return 1;
 
-    int N;
+    }
+
+
+    int N = std::atoi(argv[1]);
     std::string input;
 
-    std::cout << "Enter N" << std::endl;  
-    std::cin >> N;
 
     data Data;
     parser Parser("{","}","cmd", N ,&Data);
 
-    std::cout << "Start entering commands" << std::endl;
+    //std::cout << "Start entering commands" << std::endl;
 
     while ( true ) {
            std::cin >> input;
-           if ( std::cin.eof() ) { Parser.check("null"); break; }
+           if ( std::cin.eof() ) { Parser.check(zero); break; }
            Parser.check(input);
             
    }
