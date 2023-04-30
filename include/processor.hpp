@@ -185,10 +185,9 @@ void scheduler<T>::process(){
 }
 
 
-} // closing namespace
+} 
 
 static my::scheduler<struct my::Receive> Scheduler;
-// add thread pools , data should have a link to those pools to save data console, files , including thread id 
 
 
 
