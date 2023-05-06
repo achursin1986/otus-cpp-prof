@@ -33,7 +33,6 @@ struct Combi {
       Combi(std::size_t N): Data(data()), Parser(parser("{","}","cmd", N ,&Data)) { }
       data Data;
       parser Parser;
-      // ref to pools 
 };
 
 
@@ -70,6 +69,8 @@ class lfq {
         }
 
         auto size() const {  return size_.load(); }
+        auto get_start() const { return read_pos_; }
+        auto get_end() const { return write_pos_; } 
 
 
        auto push(const T& t) {
@@ -122,6 +123,7 @@ class scheduler{
    
     void process();
     void schedule(const T& i);
+    //void walk_and_save(handle_t handle);
 
     
     private:
@@ -136,7 +138,6 @@ class scheduler{
 
 template <typename T>
 void scheduler<T>::schedule(const T& i) {
-        //queue_.push(i);
         std::unique_lock<std::mutex> lock(mtx_); // here could be different lock only for entrance 
         queue_.push(i);
         cv_.notify_one();     
@@ -183,6 +184,31 @@ void scheduler<T>::process(){
         }
 
 }
+
+/*
+template <typename T>
+void scheduler<T>::walk_and_save(handle_t handle){
+         auto start = queue_.get_start();
+         auto end =  queue_.get_end();
+
+         do {
+            if ( queue_[start] && queue_[start].handle == handle ) {
+                 char* p = queue_[start].data.get(); // utility func
+                 std::string str;
+                 for ( int i=0; i<queue_[start].size; i++ ) {
+                            if ( p[i] != '\n') { str.append(1,p[i]); }
+                            else { contexts[handle].get()->Parser.check(str); }
+                 }
+
+            }
+            start = ++start % N;
+
+            } while ( start != end );
+
+} */
+
+
+
 
 
 } 

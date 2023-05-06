@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(async_test CXX)
-add_executable(async_test test.cpp)
-set_target_properties(async_test PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
-target_include_directories(async_test PRIVATE include)
-target_link_libraries(async_test async)
+project(bulk_server CXX)
+add_executable(bulk_server bulk_server.cpp)
+set_target_properties(bulk_server PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+target_include_directories(bulk_server PRIVATE include)
+target_link_libraries(bulk_server async)
 
 
 add_library(async SHARED async.cpp)
@@ -13,10 +13,10 @@ target_link_libraries(async pthread)
 
 
 
-install(TARGETS async_test RUNTIME DESTINATION bin)
+install(TARGETS bulk_server RUNTIME DESTINATION bin)
 install(TARGETS async LIBRARY DESTINATION lib)
 set(CPACK_GENERATOR DEB)
-set(CPACK_PACKAGE_NAME "async")
+set(CPACK_PACKAGE_NAME "bulk_server")
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}")
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
