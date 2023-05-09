@@ -6,7 +6,7 @@
 class parser : public ops {
     public:
 	parser(std::string _open, std::string _close, std::string _prefix, int _N, ops* _data)
-	    : open(_open), close(_close), prefix(_prefix), N(_N), data(_data), lock(false) {}
+	    : open(std::move(_open)), close(std::move(_close)), prefix(std::move(_prefix)), N(_N), data(_data), lock(false) {}
 
 	void check(std::string input) {
 		if (input == open) {
