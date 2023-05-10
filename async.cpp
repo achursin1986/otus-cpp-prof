@@ -13,7 +13,6 @@ namespace async {
 handle_t connect(std::size_t bulk) {
      
     std::lock_guard<std::mutex> lock(my::mtx);
-    //std::unique_ptr<my::Combi> c = std::make_unique<my::Combi>(bulk);
     std::shared_ptr<my::Combi> c( new my::Combi(bulk));  
     void * p = c.get();  
     my::contexts[p] = c;
