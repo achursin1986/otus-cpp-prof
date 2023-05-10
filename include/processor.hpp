@@ -52,7 +52,7 @@ struct Receive {
              data = other.data;
              return *this;
       }
-      Receive(async::handle_t handle_, std::shared_ptr<char[]>data_, std::size_t size_): handle(handle_),data(std::move(data_)),size(size_){};
+      Receive(async::handle_t handle_, std::shared_ptr<char[]>&&data_, std::size_t size_): handle(handle_),data(std::move(data_)),size(size_){};
       async::handle_t handle; 
       std::shared_ptr<char[]> data;
       //std::unique_ptr<char[]> data; 
