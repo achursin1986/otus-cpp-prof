@@ -43,16 +43,9 @@ struct Receive {
       Receive(): handle(nullptr),data(nullptr),size(0) {}
      
       Receive& operator=(const Receive& other) = delete; 
-     /* {
-             handle = other.handle;
-             size = other.size;
-             data = other.data;
-             return *this;
-      }*/
       Receive& operator=(Receive&& other) = default;
       Receive(async::handle_t handle_, std::unique_ptr<char[]>&&data_, std::size_t size_): handle(handle_),data(std::move(data_)),size(size_){};
       async::handle_t handle; 
-      //std::shared_ptr<char[]> data;
       std::unique_ptr<char[]> data; 
       std::size_t size;
 };
