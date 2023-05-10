@@ -48,7 +48,7 @@ struct Receive {
              data = other.data;
              return *this;
       }
-      Receive(async::handle_t handle_, std::shared_ptr<char[]>data_, std::size_t size_): handle(handle_),data(data_),size(size_){};
+      Receive(async::handle_t handle_, std::shared_ptr<char[]>&&data_, std::size_t size_): handle(handle_),data(std::move(data_)),size(size_){};
       async::handle_t handle; 
       std::shared_ptr<char[]> data; 
       std::size_t size;
@@ -124,6 +124,9 @@ class scheduler{
 
     
     private:
+
+    void queue_walk();
+
     lfq<T,10> queue_;
     std::thread th_;
     std::condition_variable cv_; 
@@ -140,42 +143,35 @@ void scheduler<T>::schedule(const T& i) {
         cv_.notify_one();     
 }
 
+template <typename T>
+void scheduler<T>::queue_walk() {
+         while  ( queue_.size() ) {
+                     // taking global mtx
+                     std::lock_guard<std::mutex> lock(mtx);
+                     // look if handle exists
+                     if (contexts.find(queue_.front().handle) != contexts.end()) {
+                            char* p = queue_.front().data.get();
+                            std::string str;
+                            // loop to tokenize
+                            for ( int i=0; i<queue_.front().size; i++ ) {
+                                       if ( p[i] != '\n') { str.append(1,p[i]); }
+                                       else { contexts[queue_.front().handle].get()->Parser.check(str); str.clear(); }
+                            }
+                     }
+                     queue_.pop();
+          }
+}
+
 
 template <typename T>
 void scheduler<T>::process(){
         while(1) {
               std::unique_lock<std::mutex> lock(mtx_);
               cv_.wait(lock, [this](){ return !running_ || queue_.size(); });              
-              while  ( queue_.size() ) {
-                     // taking global mtx
-                     std::lock_guard<std::mutex> lock(mtx);
-                     // look if handle exists                      
-                     if (contexts.find(queue_.front().handle) != contexts.end()) {
-                            char* p = queue_.front().data.get();
-                            std::string str;
-                            // loop to tokenize 
-                            for ( int i=0; i<queue_.front().size; i++ ) {
-                                       if ( p[i] != '\n') { str.append(1,p[i]); }
-                                       else { contexts[queue_.front().handle].get()->Parser.check(str); str.clear(); } 
-                            }
-                     }  
-                     queue_.pop();
-              }
-             if ( ! running_ ) {    
+              queue_walk();
+              if ( ! running_ ) {    
                      // drain queue on exit  
-                     while  ( queue_.size() ) {
-                        std::lock_guard<std::mutex> lock(mtx);
-                        if (contexts.find(queue_.front().handle) != contexts.end()) {
-                            char* p = queue_.front().data.get();
-                            std::string str;
-                            for ( int i=0; i<queue_.front().size; i++ ) {
-                                    if ( p[i] != '\n') { str.append(1,p[i]); }
-                                    else { contexts[queue_.front().handle].get()->Parser.check(str); str.clear(); }
-                        }
-                     }
-                     queue_.pop();
-                     } 
-
+                    queue_walk();
                     break;
              }          
         }

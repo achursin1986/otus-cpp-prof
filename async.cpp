@@ -25,7 +25,7 @@ handle_t connect(std::size_t bulk) {
 void receive(handle_t handle, const char *data, std::size_t size) { 
     std::shared_ptr<char[]> s (new char[size] );
     std::memcpy(s.get(), data ,size);  
-    Scheduler.schedule(my::Receive(handle,s,size));
+    Scheduler.schedule(my::Receive(handle,std::move(s),size));
 }
 
 
