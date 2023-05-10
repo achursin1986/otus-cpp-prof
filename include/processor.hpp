@@ -42,12 +42,14 @@ static std::mutex mtx; // global mutex
 struct Receive {
       Receive(): handle(nullptr),data(nullptr),size(0) {}
      
-      Receive& operator=(const Receive& other) {
+      Receive& operator=(const Receive& other) = delete; 
+     /* {
              handle = other.handle;
              size = other.size;
              data = other.data;
              return *this;
-      }
+      }*/
+      Receive& operator=(Receive&& other) = default;
       Receive(async::handle_t handle_, std::shared_ptr<char[]>&&data_, std::size_t size_): handle(handle_),data(std::move(data_)),size(size_){};
       async::handle_t handle; 
       std::shared_ptr<char[]> data; 
@@ -70,11 +72,11 @@ class lfq {
         auto get_end() const { return write_pos_; } 
 
 
-       auto push(const T& t) {
+       auto push(T&& t) {
              if ( size_.load() >= N) {
                  throw std::overflow_error("Queue is full");
              }
-             buffer_[write_pos_] = t;  
+             buffer_[write_pos_] = std::forward<T>(t);  
              write_pos_ = (write_pos_ + 1) % N;
              size_.fetch_add(1);
        }
@@ -119,7 +121,7 @@ class scheduler{
     } 
    
     void process();
-    void schedule(const T& i);
+    void schedule(T&& i);
     //void walk_and_save(handle_t handle);
 
     
@@ -137,9 +139,9 @@ class scheduler{
 
 
 template <typename T>
-void scheduler<T>::schedule(const T& i) {
+void scheduler<T>::schedule(T&& i) {
         std::unique_lock<std::mutex> lock(mtx_); // here could be different lock only for entrance 
-        queue_.push(i);
+        queue_.push(std::forward<T>(i));
         cv_.notify_one();     
 }
 
