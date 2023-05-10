@@ -33,7 +33,7 @@ struct Combi {
 };
 
 
-static std::unordered_map<void * ,std::shared_ptr<Combi>> contexts;
+static std::unordered_map<void * ,std::unique_ptr<Combi>> contexts;
 static std::mutex mtx; // global mutex
 
 
@@ -50,9 +50,10 @@ struct Receive {
              return *this;
       }*/
       Receive& operator=(Receive&& other) = default;
-      Receive(async::handle_t handle_, std::shared_ptr<char[]>&&data_, std::size_t size_): handle(handle_),data(std::move(data_)),size(size_){};
+      Receive(async::handle_t handle_, std::unique_ptr<char[]>&&data_, std::size_t size_): handle(handle_),data(std::move(data_)),size(size_){};
       async::handle_t handle; 
-      std::shared_ptr<char[]> data; 
+      //std::shared_ptr<char[]> data;
+      std::unique_ptr<char[]> data; 
       std::size_t size;
 };
 
