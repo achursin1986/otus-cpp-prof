@@ -74,8 +74,7 @@ void Thread_pool<N>::Add_task(const std::function<void()>& job) {
 
 }
 
-static Thread_pool<2> File_writer;
-static Thread_pool<1> Console_writer;
+static Thread_pool<10> DB_ops;
 
 
 }

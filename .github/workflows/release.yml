@@ -1,4 +1,4 @@
-name: 'HW10'
+name: 'HW11'
 
 on:
   push:
@@ -14,6 +14,8 @@ jobs:
           submodules: true
       - name: boost
         run: sudo apt-get update && sudo apt-get install -yq build-essential cmake libboost-dev libboost-serialization-dev libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev zlib1g-dev rapidjson-dev libquadmath0
+      - name: sqlite
+      - run: sudo apt-get install sqlite3 libsqlite3-dev
       - run: cmake .
       - run: cmake --build .
       - run: make package
@@ -34,6 +36,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bulk_server.deb
-          asset_name: bulk_server.deb
+          asset_path: ./join_server.deb
+          asset_name: join_server.deb
           asset_content_type: application/vnd.debian.binary-package
