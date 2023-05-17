@@ -17,7 +17,8 @@ jobs:
       - name: sqlite3
         run: sudo apt-get install sqlite3 libsqlite3-dev
       - name: build
-        run: cmake .
+        run: |
+             cmake .
              cmake --build .
              make package
       - name: Create Release
