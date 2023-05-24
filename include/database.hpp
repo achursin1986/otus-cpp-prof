@@ -27,7 +27,7 @@ class Database {
 	Database(Database& other) = delete;
 	void operator=(const Database& other) = delete;
 
-	static sqlite3* db;
+	//static sqlite3* db;
 	static Database* db_ptr;
         static std::string db_name;
 };

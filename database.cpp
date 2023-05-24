@@ -59,6 +59,9 @@ return 0;
 Database::Database(std::string&& name) {
 	int rc{};
 	char* zErrMsg = nullptr;
+        sqlite3* db = nullptr;
+        rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
+        if (rc) { throw std::runtime_error("Error opening/creating database file, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
 	rc = sqlite3_open(name.c_str(), &db); 
 	if (rc) { throw std::runtime_error("Error opening/creating database file, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
         db_name = name;
@@ -79,6 +82,7 @@ Database* Database::GetDatabase(std::string&& name) {
 std::string Database::Insert(std::string&& name, int id, std::string&& value) {
         int rc{};
         char* zErrMsg = nullptr;
+        sqlite3* db = nullptr;
         rc = sqlite3_open(db_name.c_str(), &db);
         if (rc) { throw std::runtime_error("Error opening/creating database file, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
         rc = sqlite3_exec(db, Insert_Into(std::move(name),id,std::move(value)).c_str(), callback, 0, &zErrMsg);
@@ -97,6 +101,7 @@ std::string Database::Insert(std::string&& name, int id, std::string&& value) {
 std::string Database::Truncate(std::string&& name) {
          int rc{};
          char* zErrMsg = nullptr;
+         sqlite3* db = nullptr;
          rc = sqlite3_open(db_name.c_str(), &db);
          if (rc) { throw std::runtime_error("Error opening/creating database file, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
          rc = sqlite3_exec(db, Truncate_DB(std::move(name)).c_str(), callback, 0, &zErrMsg);
@@ -114,6 +119,7 @@ std::string Database::Truncate(std::string&& name) {
 std::string Database::Intersection() {
          int rc{};
          char* zErrMsg = nullptr;
+         sqlite3* db = nullptr;
          rc = sqlite3_open(db_name.c_str(), &db);
          if (rc) { throw std::runtime_error("Error opening/creating database file, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
          std::string output;
@@ -136,6 +142,7 @@ std::string Database::Intersection() {
 std::string Database::Symmetric_Difference() {
         int rc{};
          char* zErrMsg = nullptr;
+         sqlite3* db = nullptr;
          rc = sqlite3_open(db_name.c_str(), &db);
          if (rc) { throw std::runtime_error("Error opening/creating database file, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
          std::string output;
@@ -156,7 +163,7 @@ std::string Database::Symmetric_Difference() {
 }
 
 
-sqlite3* Database::db = nullptr;
+//sqlite3* Database::db = nullptr;
 Database* Database::db_ptr = nullptr;
 std::string Database::db_name = "";
 
