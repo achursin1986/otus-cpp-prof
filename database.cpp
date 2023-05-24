@@ -61,7 +61,7 @@ Database::Database(std::string&& name) {
 	char* zErrMsg = nullptr;
         sqlite3* db = nullptr;
         rc = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-        if (rc) { throw std::runtime_error("Error opening/creating database file, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
+        if (rc) { throw std::runtime_error("Error setting sql params, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
 	rc = sqlite3_open(name.c_str(), &db); 
 	if (rc) { throw std::runtime_error("Error opening/creating database file, code " + std::to_string(rc)); sqlite3_free(zErrMsg);}
         db_name = name;
