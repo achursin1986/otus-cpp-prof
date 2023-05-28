@@ -29,7 +29,8 @@ jobs:
              cmake ..
              sudo cmake --build . --target install
              sudo make install
-             sudo ldconfig             
+             sudo ldconfig
+             cd ../..             
       - name: build
         run: |
              cmake .
