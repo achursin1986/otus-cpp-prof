@@ -21,6 +21,7 @@ jobs:
              sudo apt-get install libblas-dev liblapack-dev
       - name: dlib 
         run: |
+             cd /var/tmp
              wget http://dlib.net/files/dlib-19.24.tar.bz2
              tar xvf dlib-19.24.tar.bz2
              cd dlib-19.24
@@ -32,7 +33,6 @@ jobs:
              sudo ldconfig
       - name: build
         run: |
-             cd /home/runner/work/otus-cpp-prof/otus-cpp-prof/
              cmake .
              cmake --build .
              make package
@@ -53,6 +53,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${ steps.create_release.outputs.upload_url }
-          asset_path: /home/runner/work/otus-cpp-prof/otus-cpp-prof/realty.deb
+          asset_path: ./realty.deb
           asset_name: realty.deb
           asset_content_type: application/vnd.debian.binary-package
