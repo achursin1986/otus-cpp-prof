@@ -29,10 +29,10 @@ jobs:
              cmake ..
              sudo cmake --build . --target install
              sudo make install
-             cd ../..
              sudo ldconfig
       - name: build
         run: |
+             cd /home/runner/work/otus-cpp-prof/otus-cpp-prof/
              cmake .
              cmake --build .
              make package
