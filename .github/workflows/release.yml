@@ -13,8 +13,7 @@ jobs:
         with:
           submodules: true
       - name: build-essentials
-        run: |
-             apt-get update && apt-get install -yq build-essential cmake
+        run: apt-get update && apt-get install -yq build-essential cmake
       - name: dlib 
         run: |
              wget http://dlib.net/files/dlib-19.24.tar.bz2
