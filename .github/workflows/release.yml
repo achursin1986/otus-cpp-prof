@@ -12,8 +12,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: build-essentials
-        run: sudo apt-get update && sudo apt-get install -yq build-essential cmake
+      - name: os-pkgs
+        run: | 
+             sudo apt-get install build-essential cmake pkg-config
+             sudo apt-get install libx11-dev libatlas-base-dev
+             sudo apt-get install libgtk-3-dev libboost-python-dev
+             sudo apt-get install libx11-dev
+             sudo apt-get install libblas-dev liblapack-dev
       - name: dlib 
         run: |
              wget http://dlib.net/files/dlib-19.24.tar.bz2
