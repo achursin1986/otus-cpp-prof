@@ -25,6 +25,7 @@ jobs:
              tar xvf dlib-19.24.tar.bz2
              cd dlib-19.24
              mkdir build
+             cd build
              cmake ..
              sudo cmake --build . --target install
              sudo make install
