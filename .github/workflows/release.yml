@@ -1,4 +1,4 @@
-name: 'HW12'
+name: 'HW13'
 
 on:
   push:
@@ -12,6 +12,16 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
+      - name: dlib 
+        run: |
+             wget http://dlib.net/files/dlib-19.24.tar.bz2
+             tar xvf dlib-19.24.tar.bz2
+             cd dlib-19.24
+             mkdir build
+             cmake ..
+             cmake --build . --target install
+             make install
+             ldconfig             
       - name: build
         run: |
              cmake .
@@ -33,7 +43,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./yamr.deb
-          asset_name: yamr.deb
+          upload_url: ${ steps.create_release.outputs.upload_url }
+          asset_path: ./realty.deb
+          asset_name: realty.deb
           asset_content_type: application/vnd.debian.binary-package
